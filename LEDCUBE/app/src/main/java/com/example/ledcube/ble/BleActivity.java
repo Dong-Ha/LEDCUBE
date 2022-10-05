@@ -71,7 +71,6 @@ public class BleActivity extends AppCompatActivity {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
         mBtnBluetoothOn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +89,7 @@ public class BleActivity extends AppCompatActivity {
                 listPairedDevices();
             }
         });
+
         mBtnSendData.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +99,7 @@ public class BleActivity extends AppCompatActivity {
                 }
             }
         });
+
         mBluetoothHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
                 if(msg.what == BT_MESSAGE_READ){
@@ -112,11 +113,6 @@ public class BleActivity extends AppCompatActivity {
                 }
             }
         };
-
-
-
-
-
 
     }
 
@@ -146,6 +142,7 @@ public class BleActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "블루투스가 이미 비활성화 되어 있습니다.", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -161,6 +158,8 @@ public class BleActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
     void listPairedDevices() {
         if (mBluetoothAdapter.isEnabled()) {
             mPairedDevices = mBluetoothAdapter.getBondedDevices();

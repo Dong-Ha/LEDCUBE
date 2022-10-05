@@ -44,6 +44,8 @@ public class DrawActivity extends AppCompatActivity {
             Pair<Integer, Float> res = cls.classify(image);
             String outStr = String.format(Locale.ENGLISH, "%d, %.0f%%", res.first, res.second * 100.0f);
             resultView.setText(outStr);
+
+            drawView.clearCanvas();
         });
 
         Button clearBtn = findViewById(R.id.clearBtn);
