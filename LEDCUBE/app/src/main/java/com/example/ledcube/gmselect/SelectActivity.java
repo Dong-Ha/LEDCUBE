@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.example.ledcube.R;
 import com.example.ledcube.draw.DrawActivity;
+import com.example.ledcube.maze.MazeActivity;
 
 public class SelectActivity extends AppCompatActivity {
 
@@ -18,7 +19,10 @@ public class SelectActivity extends AppCompatActivity {
         setContentView(R.layout.gameselect);
 
         Button game1 = findViewById(R.id.button1);
-
+        game1.setOnClickListener(view -> {
+            Intent i = new Intent(SelectActivity.this, MazeActivity.class);
+            startActivity(i);
+        });
 
 
         Button game2 = findViewById(R.id.button2);
