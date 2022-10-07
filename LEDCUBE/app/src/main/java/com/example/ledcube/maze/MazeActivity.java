@@ -41,7 +41,8 @@ public class MazeActivity extends AppCompatActivity {
     public static int rows = 5;
     public static int cols = 5;
     public static int zs = 5;
-    public static int[][][] map = {
+    public static int[][][] map = new int[5][5][5];
+    public static int[][][] map1 = {
             {
                     {1, 0, 0, 0, 0},
                     {1, 1, 1, 1, 0},
@@ -78,8 +79,6 @@ public class MazeActivity extends AppCompatActivity {
                     {0, 1, 0, 0, 1}
             }
     };
-
-
 
 
     @Override
@@ -138,8 +137,20 @@ public class MazeActivity extends AppCompatActivity {
 
                         dap = 0;
                         path = "";
-                        dap = bfs();
+
+                        for(int i = 0; i < 5; i++){
+                            for(int j = 0; j < 5; j++){
+                                for(int k = 0; k < 5; k++){
+                                    map[i][j][k] = map1[i][j][k];
+                                }
+                            }
+                        }
+
+
+                        dap = bfs(2,2,2);
                         mConnectedThread.write(path);
+
+
 /*
                         for(int i = 1; i < path.length(); i++){
                             mConnectedThread.write( "" + path.charAt(i) ); /*"g2" +
@@ -196,7 +207,7 @@ public class MazeActivity extends AppCompatActivity {
     private void gethint (){
         dap = 0;
         path = "";
-        dap = bfs();
+        dap = bfs(0,0,0);
 
 
         for(int i = 1; i < path.length(); i++){
@@ -385,17 +396,17 @@ public class MazeActivity extends AppCompatActivity {
 
 
     ///////////////////////////////////////////////////////////////////////
-    private static int bfs() {
+    private static int bfs(int z, int x, int y) {
         int ret = 0;
-        int curRow = 0;        // 현재 row
-        int curCol = 0;        // 현재 col
-        int curz = 0;
+        int curRow = y;        // 현재 row
+        int curCol = x;        // 현재 col
+        int curz = z;
         int curDist = 1;    // 현재 이동한 거리
         String curPath = "";    // 현재까지 이동경로
 
         // BFS에서는 큐에 시작정보(0,0) 세팅
         LinkedList<MMAZE> queue = new LinkedList<MMAZE>();
-        queue.add(new MMAZE(curz, curRow, curCol, curDist, curPath,0));
+        queue.add(new MMAZE(curz, curRow, curCol, curDist, curPath,1));
 
         // 큐가 empty일 때까지 루핑
         while(!queue.isEmpty()) {
