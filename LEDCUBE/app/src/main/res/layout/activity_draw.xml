@@ -8,13 +8,24 @@
     tools:context=".draw.DrawActivity"
     android:background="#EDEDED">
 
+    <Button
+        android:id="@+id/gmstart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="게임시작"/>
+
     <com.divyanshu.draw.widget.DrawView
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:visibility="invisible">
     </com.divyanshu.draw.widget.DrawView>
 
     <LinearLayout
@@ -25,7 +36,8 @@
         app:layout_constraintTop_toBottomOf="@id/drawView"
         app:layout_constraintBottom_toTopOf="@id/resultView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible">
 
         <Button
             android:id="@+id/classifyBtn"
@@ -53,7 +65,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="50sp"/>
+        android:textSize="50sp"
+        android:visibility="invisible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
