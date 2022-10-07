@@ -63,6 +63,48 @@ public class MazeActivity extends AppCompatActivity {
             restart.setVisibility(View.VISIBLE);
         });
 
+        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.button2:
+                        mConnectedThread.write("g2g");
+                        break;
+                    case R.id.button5:
+                        mConnectedThread.write("g2b");
+                        break;
+                    case R.id.button3:
+                        mConnectedThread.write("g2r");
+                        break;
+                    case R.id.button4:
+                        mConnectedThread.write("g2l");
+                        break;
+                    case R.id.button6:
+                        mConnectedThread.write("g2u");
+                        break;
+                    case R.id.button7:
+                        mConnectedThread.write("g2d");
+                        break;
+                    case R.id.button8:
+                        gethint();
+                        break;
+                    case R.id.button9:
+                        mConnectedThread.write("g2r");
+                        break;
+
+                }
+            }
+        };
+
+        go.setOnClickListener(onClickListener);
+        back.setOnClickListener(onClickListener);
+        right.setOnClickListener(onClickListener);
+        left.setOnClickListener(onClickListener);
+        up.setOnClickListener(onClickListener);
+        down.setOnClickListener(onClickListener);
+        hint.setOnClickListener(onClickListener);
+        restart.setOnClickListener(onClickListener);
+
 
 
 
@@ -85,6 +127,10 @@ public class MazeActivity extends AppCompatActivity {
         };
     }
 
+
+    private void gethint (){
+        mConnectedThread.write("g2h");
+    }
 
 
 

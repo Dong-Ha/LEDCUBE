@@ -11,7 +11,7 @@
         android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:text="게임시작"
-
+        android:textSize="18dp"
         android:visibility="visible" />
 
     <Button
