@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -60,7 +61,7 @@ public class MazeActivity extends AppCompatActivity {
             {
                     {0, 0, 1, 0, 0},
                     {1, 1, 1, 0, 0},
-                    {1, 0, 1, 1, 0},
+                    {1, 0, 1, 0, 0},
                     {0, 0, 0, 1, 0},
                     {0, 0, 0, 1, 0}
             },
@@ -111,27 +112,35 @@ public class MazeActivity extends AppCompatActivity {
             restart.setVisibility(View.VISIBLE);
         });
 
+
+
         Button.OnClickListener onClickListener = new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.button2:
-                        mConnectedThread.write("g2g");
+                        mConnectedThread.write("g");
+                        //mConnectedThread.write("g2g");
                         break;
                     case R.id.button5:
-                        mConnectedThread.write("g2b");
+                        mConnectedThread.write("b");
+                        //mConnectedThread.write("g2b");
                         break;
                     case R.id.button3:
-                        mConnectedThread.write("g2r");
+                        mConnectedThread.write("r");
+                        //mConnectedThread.write("g2r");
                         break;
                     case R.id.button4:
-                        mConnectedThread.write("g2l");
+                        mConnectedThread.write("l");
+                        //mConnectedThread.write("g2l");
                         break;
                     case R.id.button6:
-                        mConnectedThread.write("g2u");
+                        mConnectedThread.write("u");
+                        //mConnectedThread.write("g2u");
                         break;
                     case R.id.button7:
-                        mConnectedThread.write("g2d");
+                        mConnectedThread.write("d");
+                        //mConnectedThread.write("g2d");
                         break;
                     case R.id.button8: {
 
@@ -148,8 +157,12 @@ public class MazeActivity extends AppCompatActivity {
 
 
                         dap = bfs(2,2,2);
-                        mConnectedThread.write(path);
 
+                        for(int i = 1; i < path.length(); i++) {
+                            mConnectedThread.write( String.valueOf(path.charAt(i)) );
+                            try{ Thread.sleep(500);}
+                            catch(InterruptedException e) {}
+                        }
 
 /*
                         for(int i = 1; i < path.length(); i++){
@@ -425,11 +438,11 @@ public class MazeActivity extends AppCompatActivity {
                 break;
             }
 
-            // 위로 갈수 있으면
+            // 앞으로로 갈수 있으면
             if(curRow-1 >= 0 && map[curz][curRow-1][curCol] == 1) {
                 queue.add(new MMAZE(curz, curRow-1, curCol, curDist+1, curPath,1));
             }
-            // 아래로 갈수 있으면
+            // 뒤로 갈수 있으면
             if(curRow+1 < rows && map[curz][curRow+1][curCol] == 1) {
                 queue.add(new MMAZE(curz, curRow+1, curCol, curDist+1, curPath,2));
             }
@@ -475,22 +488,22 @@ public class MazeActivity extends AppCompatActivity {
             else {
                 switch (this.direction){
                     case 1:
-                        this.path = oldPath + "w";
+                        this.path = oldPath + "g";
                         break;
                     case 2:
-                        this.path = oldPath + "s";
+                        this.path = oldPath + "b";
                         break;
                     case 3:
-                        this.path = oldPath + "a";
+                        this.path = oldPath + "l";
                         break;
                     case 4:
-                        this.path = oldPath + "d";
+                        this.path = oldPath + "r";
                         break;
                     case 5:
                         this.path = oldPath + "u";
                         break;
                     case 6:
-                        this.path = oldPath + "n";
+                        this.path = oldPath + "d";
                         break;
                 }
 
