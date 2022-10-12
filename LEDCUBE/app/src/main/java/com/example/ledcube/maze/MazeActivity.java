@@ -39,19 +39,27 @@ public class MazeActivity extends AppCompatActivity {
     public static String calculating_path = "";
     public static String path = "";
 
-    public static int xx= 0;
-    public static int yy= 0;
-    public static int zz= 0;
+    public static int xx = 0;
+    public static int yy = 0;
+    public static int zz = 0;
 
-    public static int tmp_xx= 0;
-    public static int tmp_yy= 0;
-    public static int tmp_zz= 0;
+    public static int tmp_xx = 0;
+    public static int tmp_yy = 0;
+    public static int tmp_zz = 0;
 
-    public static int rows = 5;
-    public static int cols = 5;
-    public static int zs = 5;
+    public static int dz[] ={0, 0, 0, 0, 1, -1};
+    public static int dy[] ={-1, 0, 1, 0, 0, 0}; // 앞으로, 오른쪽, 뒤로, 왼쪽, 위, 아래
+    public static int dx[] ={0, 1, 0, -1, 0, 0};
+
+    public static int ret = 0;
+
+    public static final int zs = 5;
+    public static final int ys = 5;
+    public static final int xs = 5;
+    public static int[][][] visited = new int[5][5][5];
+
     public static int[][][] map = new int[5][5][5];
-    public static int[][][] map1 = {
+    public static final int[][][] map1 = {
             {
                     {1, 0, 0, 0, 0},
                     {1, 1, 1, 1, 0},
@@ -151,36 +159,28 @@ public class MazeActivity extends AppCompatActivity {
                         //mConnectedThread.write("g2d");
                         break;
                     case R.id.button8: {
-
+                        calculating_path = "";
                         path = "";
-
+                        ret = 0;
                         for(int i = 0; i < 5; i++){
                             for(int j = 0; j < 5; j++){
                                 for(int k = 0; k < 5; k++){
                                     map[i][j][k] = map1[i][j][k];
+                                    visited[i][j][k] = 0;
                                 }
                             }
                         }
-                        tmp_zz = zz;
-                        tmp_xx = xx;
-                        tmp_yy = yy;
-
-                        //bfs(zz,xx,yy);
-
-                        zz = tmp_zz;
-                        xx = tmp_xx;
-                        yy = tmp_yy;
+                        tmp_zz = zz;    tmp_xx = xx;    tmp_yy = yy;
+                        dfs(tmp_zz,tmp_yy,tmp_xx);
 
                         mConnectedThread.write("s"); // 출발점 복귀를 위한 정보 저장
                         try{ Thread.sleep(500);}
                         catch(InterruptedException e) {}
-
-                        for(int i = 1; i < path.length(); i++) {
+                        for(int i = 0; i < path.length(); i++) {
                             mConnectedThread.write( String.valueOf(path.charAt(i)) );
                             try{ Thread.sleep(500);}
                             catch(InterruptedException e) {}
                         }
-
                         mConnectedThread.write("n");
 
                         break;
@@ -244,6 +244,9 @@ public class MazeActivity extends AppCompatActivity {
                             break;
                         case 'd':
                             zz--;
+                            break;
+                        case 'n':
+                            zz = tmp_zz;    xx = tmp_xx;    yy = tmp_yy;
                             break;
 
                         default:
@@ -426,12 +429,32 @@ public class MazeActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     ///////////////////////////////////////////////////////////////////////
+    void dfs(int z, int y, int x){
+        visited[z][y][x] = 1;
+        if(z == zs - 1 && y == ys - 1 && x == xs - 1){
+            path = calculating_path;
+            ret = 1;
+            return ;
+        }
+        if(ret == 1) return;
 
+        for(int i = 0; i < 6; i++){
+            int nz = z + dz[i];
+            int ny = y + dy[i];
+            int nx = x + dx[i];
+
+            if(nz < 0 || ny < 0 || nx < 0 || nz >= zs || ny >= ys || nx >= xs || map[nz][ny][nx] == 0 || visited[nz][ny][nx] == 1) continue;
+            if(i == 0) calculating_path += "g";
+            else if(i == 1) calculating_path += "r";
+            else if(i == 2) calculating_path += "b";
+            else if(i == 3) calculating_path += "l";
+            else if(i == 4) calculating_path += "u";
+            else if(i == 5) calculating_path += "d";
+            dfs(nz, ny, nx);
+            calculating_path = calculating_path.substring(0, calculating_path.length() - 1);
+        }
+    }
 
 
 
