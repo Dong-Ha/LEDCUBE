@@ -36,8 +36,8 @@ public class MazeActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
 
     String s;
+    public static String calculating_path = "";
     public static String path = "";
-    public static int dap;
 
     public static int xx= 0;
     public static int yy= 0;
@@ -152,7 +152,6 @@ public class MazeActivity extends AppCompatActivity {
                         break;
                     case R.id.button8: {
 
-                        dap = 0;
                         path = "";
 
                         for(int i = 0; i < 5; i++){
@@ -166,7 +165,7 @@ public class MazeActivity extends AppCompatActivity {
                         tmp_xx = xx;
                         tmp_yy = yy;
 
-                        dap = bfs(zz,xx,yy);
+                        //bfs(zz,xx,yy);
 
                         zz = tmp_zz;
                         xx = tmp_xx;
@@ -432,107 +431,9 @@ public class MazeActivity extends AppCompatActivity {
 
 
     ///////////////////////////////////////////////////////////////////////
-    private static int bfs(int z, int x, int y) {
-        int ret = 0;
-        int curRow = y;        // 현재 row
-        int curCol = x;        // 현재 col
-        int curz = z;
-        int curDist = 1;    // 현재 이동한 거리
-        String curPath = "";    // 현재까지 이동경로
-
-        // BFS에서는 큐에 시작정보(0,0) 세팅
-        LinkedList<MMAZE> queue = new LinkedList<MMAZE>();
-        queue.add(new MMAZE(curz, curRow, curCol, curDist, curPath,1));
-
-        // 큐가 empty일 때까지 루핑
-        while(!queue.isEmpty()) {
-            MMAZE coord = (MMAZE) queue.poll();
-            curz = coord.z;
-            curRow = coord.row;
-            curCol = coord.col;
-            curDist = coord.dist;
-            curPath = coord.path;
-            path = curPath;
-            ret = curDist;
-            map[curz][curRow][curCol] = 0;
-
-            // 목적지에 도착하면 루핑 종료
-            if(curz == zs-1 &&  curRow == rows - 1 && curCol == cols - 1) {
-                break;
-            }
-
-            // 앞으로로 갈수 있으면
-            if(curRow-1 >= 0 && map[curz][curRow-1][curCol] == 1) {
-                queue.add(new MMAZE(curz, curRow-1, curCol, curDist+1, curPath,1));
-            }
-            // 뒤로 갈수 있으면
-            if(curRow+1 < rows && map[curz][curRow+1][curCol] == 1) {
-                queue.add(new MMAZE(curz, curRow+1, curCol, curDist+1, curPath,2));
-            }
-            // 왼쪽으로 갈수 있으면
-            if(curCol-1 >= 0 && map[curz][curRow][curCol-1] == 1) {
-                queue.add(new MMAZE(curz, curRow, curCol-1, curDist+1, curPath,3));
-            }
-            // 오른쪽으로 갈수 있으면
-            if(curCol+1 < cols && map[curz][curRow][curCol+1] == 1) {
-                queue.add(new MMAZE(curz, curRow, curCol+1, curDist+1, curPath,4));
-            }
-            // 한층 위로
-            if(curz+1 < zs  && map[curz+1][curRow][curCol] == 1) {
-                queue.add(new MMAZE(curz+1, curRow, curCol, curDist+1, curPath,5));
-            }
-            // 한층 아래로
-            if(curz-1 >=0  && map[curz-1][curRow][curCol] == 1) {
-                queue.add(new MMAZE(curz-1, curRow, curCol, curDist+1, curPath,6));
-            }
 
 
-        }
 
-        // 큐 클리어
-        queue.clear();
-
-        return ret;
-    }
-
-    public static class MMAZE {
-        int z, row, col, dist, direction;
-        String path;
-        public MMAZE(int z ,int row, int col, int dist, String oldPath, int direction) {
-            this.z = z;
-            this.row = row;
-            this.col = col;
-            this.dist = dist;
-            this.direction = direction;
-            if("".equals(oldPath)) {
-                this.path = "0";
-
-            }
-            else {
-                switch (this.direction){
-                    case 1:
-                        this.path = oldPath + "g";
-                        break;
-                    case 2:
-                        this.path = oldPath + "b";
-                        break;
-                    case 3:
-                        this.path = oldPath + "l";
-                        break;
-                    case 4:
-                        this.path = oldPath + "r";
-                        break;
-                    case 5:
-                        this.path = oldPath + "u";
-                        break;
-                    case 6:
-                        this.path = oldPath + "d";
-                        break;
-                }
-
-            }
-        }
-    }
 
 
 
