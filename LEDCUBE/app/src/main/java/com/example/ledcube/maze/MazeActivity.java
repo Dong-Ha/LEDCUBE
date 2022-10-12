@@ -43,6 +43,10 @@ public class MazeActivity extends AppCompatActivity {
     public static int yy= 0;
     public static int zz= 0;
 
+    public static int tmp_xx= 0;
+    public static int tmp_yy= 0;
+    public static int tmp_zz= 0;
+
     public static int rows = 5;
     public static int cols = 5;
     public static int zs = 5;
@@ -158,9 +162,15 @@ public class MazeActivity extends AppCompatActivity {
                                 }
                             }
                         }
-
+                        tmp_zz = zz;
+                        tmp_xx = xx;
+                        tmp_yy = yy;
 
                         dap = bfs(zz,xx,yy);
+
+                        zz = tmp_zz;
+                        xx = tmp_xx;
+                        yy = tmp_yy;
 
                         mConnectedThread.write("s"); // 출발점 복귀를 위한 정보 저장
                         try{ Thread.sleep(500);}
