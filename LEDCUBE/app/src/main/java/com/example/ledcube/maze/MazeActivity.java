@@ -39,6 +39,10 @@ public class MazeActivity extends AppCompatActivity {
     public static String path = "";
     public static int dap;
 
+    public static int xx= 0;
+    public static int yy= 0;
+    public static int zz= 0;
+
     public static int rows = 5;
     public static int cols = 5;
     public static int zs = 5;
@@ -156,7 +160,11 @@ public class MazeActivity extends AppCompatActivity {
                         }
 
 
-                        dap = bfs(2,2,2);
+                        dap = bfs(zz,xx,yy);
+
+                        mConnectedThread.write("s"); // 출발점 복귀를 위한 정보 저장
+                        try{ Thread.sleep(500);}
+                        catch(InterruptedException e) {}
 
                         for(int i = 1; i < path.length(); i++) {
                             mConnectedThread.write( String.valueOf(path.charAt(i)) );
@@ -164,20 +172,15 @@ public class MazeActivity extends AppCompatActivity {
                             catch(InterruptedException e) {}
                         }
 
-/*
-                        for(int i = 1; i < path.length(); i++){
-                            mConnectedThread.write( "" + path.charAt(i) ); /*"g2" +
-
-
-                        }*/
-                       // gethint();
+                        mConnectedThread.write("n");
 
                         break;
                     }
-                    case R.id.button9:
-                        mConnectedThread.write("g2r");
+                    case R.id.button9: {
+                        mConnectedThread.write("h");
+                        xx = 0; yy = 0; zz = 0;
                         break;
-
+                    }
                     default:
                         break;
 
@@ -207,6 +210,37 @@ public class MazeActivity extends AppCompatActivity {
                     recDataString.append(readMessage);
 
                 //    rrr.setText(recDataString);  원하는 텍스트 설정 부분
+                    switch (recDataString.charAt(0)){
+                        case 'r':{
+                            xx++;
+                            Log.d("MAZE", "xx increase");
+                            break;
+                        }
+                        case 'l':{
+                            xx--;
+                            Log.d("MAZE", "xx decrease");
+                            break;}
+                        case 'g':{
+                            yy--;
+                            Log.d("MAZE", "yy decrease");
+                            break;
+                        }
+                        case 'b':{
+                            yy++;
+                            Log.d("MAZE", "yy increase");
+                            break;
+                        }
+                        case 'u':
+                            zz++;
+                            break;
+                        case 'd':
+                            zz--;
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     // Do stuff here with your data, like adding it to the database
                 }
                 //clear all string data
@@ -216,31 +250,10 @@ public class MazeActivity extends AppCompatActivity {
 
     }
 
-    ///////////////////////////// dfs 힌트 호출 함수
-    private void gethint (){
-        dap = 0;
-        path = "";
-        dap = bfs(0,0,0);
-
-
-        for(int i = 1; i < path.length(); i++){
-            mConnectedThread.write( "" + path.charAt(i) ); /*"g2" + */
-           /* try{
-            sleep(1000);
-            } catch(InterruptedException e){
-            }*/
-        }
-
-        path = null;
-
-
-    }
-
-
-
     @Override
     protected void onPause(){
         super.onPause();
+        mConnectedThread.write("0");
         mConnectedThread.closeStreams();
         mConnectingThread.closeSocket();
 
@@ -296,7 +309,7 @@ public class MazeActivity extends AppCompatActivity {
                 Log.d("DEBUG BT", "CONNECTED THREAD STARTED");
                 //I send a character when resuming.beginning transmission to check device is connected
                 //If it is not an exception will be thrown in the write method and finish() will be called
-                mConnectedThread.write("x");
+                mConnectedThread.write("1"); // 미로 게임 시작 부분
             } catch (IOException e) {
                 try {
                     Log.d("DEBUG BT", "SOCKET CONNECTION FAILED : " + e.toString());
