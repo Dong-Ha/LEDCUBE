@@ -17,7 +17,7 @@ import java.nio.channels.FileChannel;
 
 public class Classifier {
 
-    private static final String MODEL_NAME = "MODEL_CNN_FI.tflite";
+    private static final String MODEL_NAME = "MODEL_CNN_FI_v4.tflite";
 
     Context context;
     Interpreter interpreter = null;

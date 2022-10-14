@@ -40,6 +40,8 @@ public class DrawActivity extends AppCompatActivity {
     private ConnectingThread mConnectingThread;
     private ConnectedThread mConnectedThread;
 
+    public static int target = 0;
+
     String s;
 
     Classifier cls;
@@ -74,6 +76,10 @@ public class DrawActivity extends AppCompatActivity {
                     // msg.arg1 = bytes from connect thread
                     recDataString.append(readMessage);
 
+                    if(recDataString.charAt(0) >='0' && recDataString.charAt(0) <='7' ){
+                        target = (recDataString.charAt(0) - '0') / 2;
+                    }
+
                 //rrr.setText(recDataString);   원하는 텍스트 보내는 부분
                     // Do stuff here with your data, like adding it to the database
                 }
@@ -98,6 +104,11 @@ public class DrawActivity extends AppCompatActivity {
             resultView.setText(outStr);
 
             drawView.clearCanvas();
+
+            if(res.first == target){
+                mConnectedThread.write("2");
+            }
+
         });
 
         Button clearBtn = findViewById(R.id.clearBtn);
@@ -117,6 +128,7 @@ public class DrawActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+        mConnectedThread.write("0");
         mConnectedThread.closeStreams();
         mConnectingThread.closeSocket();
 
@@ -181,7 +193,7 @@ public class DrawActivity extends AppCompatActivity {
                 Log.d("DEBUG BT", "CONNECTED THREAD STARTED");
                 //I send a character when resuming.beginning transmission to check device is connected
                 //If it is not an exception will be thrown in the write method and finish() will be called
-                mConnectedThread.write("x");
+                mConnectedThread.write("2"); // 그림 맞추기 게임 시작 부분
             } catch (IOException e) {
                 try {
                     Log.d("DEBUG BT", "SOCKET CONNECTION FAILED : " + e.toString());
