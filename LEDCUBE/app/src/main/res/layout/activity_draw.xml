@@ -18,12 +18,49 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="게임시작"/>
 
+
+    <LinearLayout
+        android:id="@+id/timeshow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/drawView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/currnttime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="플레이 시간 : 00:00:00"
+            android:textSize="15sp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/currntcount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="맞춘개수 : 0"
+            android:textSize="15sp"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
     <com.divyanshu.draw.widget.DrawView
+        android:layout_marginTop="30dp"
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timeshow"
         android:background="#FFFFFF"
         android:visibility="invisible">
     </com.divyanshu.draw.widget.DrawView>
@@ -34,7 +71,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/drawView"
-        app:layout_constraintBottom_toTopOf="@id/resultView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="invisible">
@@ -56,17 +93,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/resultView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result"
-        app:layout_constraintTop_toBottomOf="@id/buttonLayout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="50sp"
-        android:visibility="invisible"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

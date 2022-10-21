@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class DrawActivity extends AppCompatActivity {
@@ -41,6 +43,8 @@ public class DrawActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
 
     public static int target = 0;
+    public int cnt = 0;
+    public int now = 0;
 
     String s;
 
@@ -53,9 +57,25 @@ public class DrawActivity extends AppCompatActivity {
 
         Button gamestart = findViewById(R.id.gmstart);
         DrawView drawView = findViewById(R.id.drawView);
-        TextView resultView = findViewById(R.id.resultView);
         Button classifyBtn = findViewById(R.id.classifyBtn);
         LinearLayout btnlayout = findViewById(R.id.buttonLayout);
+        TextView ttime = findViewById(R.id.currnttime);
+        TextView ccnt = findViewById(R.id.currntcount);
+
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask(){
+            @Override
+            public void run(){
+                now++;
+                int hour = now / 3600;
+                int minute = now / 60;
+                int second = now % 60;
+                String tmp = String.format("%02d", hour) + ":"+ String.format("%02d", minute) + ":" + String.format("%02d", second);
+                ttime.setText("플레이 시간 : " + tmp);
+
+            }
+        };
 
 
         gamestart.setOnClickListener(view -> {
@@ -64,7 +84,9 @@ public class DrawActivity extends AppCompatActivity {
             gamestart.setVisibility(View.INVISIBLE);
             drawView.setVisibility(View.VISIBLE);
             btnlayout.setVisibility(View.VISIBLE);
-            resultView.setVisibility(View.VISIBLE);
+            ttime.setVisibility(View.VISIBLE);
+            ccnt.setVisibility(View.VISIBLE);
+            timer.schedule(timerTask, 0, 1000);
         });
 
         bluetoothIn = new Handler() {
@@ -101,12 +123,13 @@ public class DrawActivity extends AppCompatActivity {
 
             Pair<Integer, Float> res = cls.classify(image);
             String outStr = String.format(Locale.ENGLISH, "%d, %.0f%%", res.first, res.second * 100.0f);
-            resultView.setText(outStr);
 
             drawView.clearCanvas();
 
             if(res.first == target){
                 mConnectedThread.write("2");
+                cnt++;
+                ccnt.setText("맞힌개수 : " + Integer.toString(cnt));
             }
 
         });
@@ -122,6 +145,10 @@ public class DrawActivity extends AppCompatActivity {
         } catch(IOException ioe) {
             Log.d("DigitClassifier", "failed to init Classifier", ioe);
         }
+
+
+
+
 
     }
 
@@ -194,6 +221,9 @@ public class DrawActivity extends AppCompatActivity {
                 //I send a character when resuming.beginning transmission to check device is connected
                 //If it is not an exception will be thrown in the write method and finish() will be called
                 mConnectedThread.write("2"); // 그림 맞추기 게임 시작 부분
+
+
+
             } catch (IOException e) {
                 try {
                     Log.d("DEBUG BT", "SOCKET CONNECTION FAILED : " + e.toString());
